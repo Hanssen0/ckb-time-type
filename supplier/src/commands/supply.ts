@@ -3,8 +3,6 @@ import { ccc } from "@ckb-ccc/shell";
 import {
   CKB_TIME_TYPE_CELL_DEP_TX_HASH,
   CKB_TIME_TYPE_CELL_DEP_INDEX,
-  CKB_TIME_TYPE_CODE_HASH,
-  CKB_TIME_TYPE_HASH_TYPE,
 } from "../constants.js";
 import { findTimeCells } from "../utils.js";
 
@@ -112,7 +110,7 @@ async function update(
     hashType?: ccc.HashTypeLike;
   },
 ) {
-  const { cells } = await findTimeCells(signer.client, args, flags);
+  const { cells, n } = await findTimeCells(signer.client, args, flags);
   const old_timestamp = ccc.numFromBytes(cells[0].outputData);
   const previous_timestamp = ccc.numFromBytes(
     cells[cells.length - 1].outputData,
