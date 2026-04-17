@@ -6,6 +6,7 @@ import {
   CKB_TIME_TYPE_CODE_HASH,
   CKB_TIME_TYPE_HASH_TYPE,
 } from "../constants.js";
+import { findTimeCells } from "../utils.js";
 
 const HEX_PARSER = async (raw: string) => ccc.hexFrom(raw);
 
@@ -103,7 +104,7 @@ export default class Supply extends Command {
 async function update(
   logger: Command,
   signer: ccc.Signer,
-  argsLike: ccc.BytesLike,
+  args: ccc.BytesLike,
   flags: {
     txHash?: ccc.HexLike;
     index?: ccc.NumLike;
@@ -111,27 +112,7 @@ async function update(
     hashType?: ccc.HashTypeLike;
   },
 ) {
-  const args = ccc.bytesFrom(argsLike);
-  const n = args[32];
-  const type = ccc.Script.from({
-    codeHash: flags.codeHash ?? CKB_TIME_TYPE_CODE_HASH,
-    hashType: flags.hashType ?? CKB_TIME_TYPE_HASH_TYPE,
-    args,
-  });
-
-  const cells = [];
-  for await (const cell of signer.client.findCellsByType(type, true)) {
-    cells.push(cell);
-  }
-  if (cells.length !== n) {
-    throw Error("Cells count and N are mismatched");
-  }
-
-  cells.sort((a, b) => {
-    const diff =
-      ccc.numFromBytes(a.outputData) - ccc.numFromBytes(b.outputData);
-    return diff > 0n ? 1 : diff === 0n ? 0 : -1;
-  });
+  const { cells } = await findTimeCells(signer.client, args, flags);
   const old_timestamp = ccc.numFromBytes(cells[0].outputData);
   const previous_timestamp = ccc.numFromBytes(
     cells[cells.length - 1].outputData,
