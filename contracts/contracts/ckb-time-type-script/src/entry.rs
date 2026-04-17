@@ -31,12 +31,12 @@ pub fn entry() -> Result<(), Error> {
     };
 
     // Enforce Input count constrain
-    if load_cell_data(1, Source::GroupOutput).is_ok() {
+    if load_cell_data(1, Source::GroupInput).is_ok() {
         return Err(Error::TooManyInputs);
     }
 
     // Check if we are in creation or update
-    match load_cell_data(0, Source::GroupOutput) {
+    match load_cell_data(0, Source::GroupInput) {
         Err(SysError::IndexOutOfBound) => handle_creation(&context),
         Ok(data) => handle_update(&context, &data),
         Err(err) => Err(err.into()),

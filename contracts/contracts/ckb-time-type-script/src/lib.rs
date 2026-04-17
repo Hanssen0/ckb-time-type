@@ -1,6 +1,5 @@
 #![cfg_attr(not(any(feature = "library", test)), no_std)]
 
-#[cfg(not(any(feature = "library", test)))]
 extern crate alloc;
 
 pub mod error;

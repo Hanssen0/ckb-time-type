@@ -19,7 +19,7 @@ pub fn handle_creation(context: &ScriptContext) -> Result<(), Error> {
         })
         .unwrap() as u64;
 
-    let expected_id = calc_type_id(first_input, first_output_index);
+    let expected_id = calc_type_id(&first_input, first_output_index);
     if context.type_id != expected_id {
         return Err(Error::InvalidTypeId);
     }

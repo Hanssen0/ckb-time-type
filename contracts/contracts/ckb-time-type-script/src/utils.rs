@@ -4,7 +4,7 @@ use ckb_std::ckb_types::prelude::*;
 
 use crate::error::Error;
 
-pub fn calc_type_id(input: CellInput, index: u64) -> [u8; 32] {
+pub fn calc_type_id(input: &CellInput, index: u64) -> [u8; 32] {
     let mut blake2b = new_blake2b();
     blake2b.update(input.as_slice());
     blake2b.update(&index.to_le_bytes());
