@@ -2,6 +2,11 @@
 
 This project provides CKB scripts for time-related type definitions, bootstrapped with [ckb-script-templates].
 
+## Design
+
+For detailed technical specifications and validation logic, please refer to:
+- **[Contract Design Specification](../docs/00-contract-design.md)**
+
 ## Usage
 
 ### Reproducible Build (Recommended)
