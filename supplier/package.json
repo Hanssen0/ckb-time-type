@@ -2,11 +2,12 @@
   "name": "ckb-time-supplier",
   "version": "0.0.1",
   "description": "",
-  "main": "src/index.ts",
+  "main": "bin/run.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "node dist/src/index.js",
-    "dev": "tsx src/index.ts"
+    "start": "node bin/run.js",
+    "dev": "node bin/dev.js"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +15,29 @@
   "packageManager": "pnpm@10.23.0",
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@ckb-ccc/shell": "^1.1.25"
+    "@ckb-ccc/shell": "^1.1.25",
+    "@oclif/core": "^4.10.5"
+  },
+  "bin": {
+    "ckb-time-supplier": "./bin/run.js"
+  },
+  "oclif": {
+    "bin": "ckb-time-supplier",
+    "commands": "./dist/commands",
+    "dirname": "ckb-time-supplier",
+    "topicSeparator": " ",
+    "additionalHelpFlags": [
+      "-h",
+      "help"
+    ],
+    "additionalVersionFlags": [
+      "-v",
+      "version"
+    ]
   }
 }
