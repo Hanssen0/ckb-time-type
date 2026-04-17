@@ -36,11 +36,15 @@ async function create(signer: ccc.Signer, n: number) {
   await tx.completeInputsAtLeastOne(signer);
   const args = ccc.bytesConcat(ccc.hashTypeId(tx.inputs[0], 0), [n]);
 
+  const lock = await ccc.Script.fromKnownScript(
+    signer.client,
+    ccc.KnownScript.AlwaysSuccess,
+    "",
+  );
   const type = ccc.Script.from({
     ...CKB_TIME_TYPE,
     args,
   });
-  const { script: lock } = await signer.getRecommendedAddressObj();
 
   for (let i = 0; i < n; i += 1) {
     tx.addOutput({ lock, type }, ccc.numToBytes(timestamp, 8));

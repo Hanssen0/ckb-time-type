@@ -43,6 +43,7 @@ Triggered when a transaction modifies the state of a cell:
    - **Inputs**: Must contain exactly one old cell of this type; read its `old_timestamp`.
    - **Outputs**: Must contain exactly one corresponding updated cell; write its `new_timestamp`.
    - **Cell Deps**: Must contain all other `N - 1` cells in the group; read their timestamps as the set `deps_timestamps`.
+   - **Lock Script Continuity**: The `lock` script hash of the output cell must be identical to the `lock` script hash of the input cell. This prevents an attacker from changing the lock script (which is typically "always success" to allow permissionless updates) to a restricted one, which would effectively "hijack" the cell and stop the oracle's rotation.
 2. **Round-robin Rotation**:
    - **Oldest Verification**: `old_timestamp` must be less than or equal to every value in `deps_timestamps`.
    - **Newest Verification**: `new_timestamp` must be strictly greater than `old_timestamp` AND strictly greater than every value in `deps_timestamps`.

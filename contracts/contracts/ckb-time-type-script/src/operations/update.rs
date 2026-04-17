@@ -6,7 +6,9 @@ use crate::{
 use alloc::vec::Vec;
 use ckb_std::{
     ckb_constants::Source,
-    high_level::{QueryIter, load_cell_data, load_cell_type_hash, load_header},
+    high_level::{
+        QueryIter, load_cell_data, load_cell_lock_hash, load_cell_type_hash, load_header,
+    },
 };
 
 pub fn handle_update(context: &ScriptContext, input_data: &[u8]) -> Result<(), Error> {
@@ -21,7 +23,12 @@ pub fn handle_update(context: &ScriptContext, input_data: &[u8]) -> Result<(), E
     let new_data = load_cell_data(0, Source::GroupOutput)?;
     let new_timestamp = decode_timestamp(&new_data)?;
 
-    // 1.3 Decode timestamps from the cell deps
+    // 1.3 Enforce Lock script has be kept same
+    if load_cell_lock_hash(0, Source::GroupInput)? != load_cell_lock_hash(0, Source::GroupOutput)? {
+        return Err(Error::LockChanged);
+    }
+
+    // 1.4 Decode timestamps from the cell deps
     let dep_timestamps: Vec<u64> = QueryIter::new(load_cell_type_hash, Source::CellDep)
         .enumerate()
         // Only cells with the same type script hash

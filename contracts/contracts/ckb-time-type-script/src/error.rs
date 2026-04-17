@@ -27,6 +27,7 @@ pub enum Error {
 
     CellDepsCountMismatch = -8,
     RoundRobinFailed = -9,
+    LockChanged = -10,
 }
 
 impl From<SysError> for Error {
