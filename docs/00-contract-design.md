@@ -42,12 +42,11 @@ Triggered when a transaction modifies the state of a cell:
 1. **Input/Output Constraints**:
    - **Inputs**: Must contain exactly one old cell of this type; read its `old_timestamp`.
    - **Outputs**: Must contain exactly one corresponding updated cell; write its `new_timestamp`.
-   - **Cell Deps**: Must contain all other cells in the group; read their timestamps as the set `deps_timestamps`.
-2. **Integrity**: The total count of cells from the same group in `Inputs` and `Cell Deps` must equal `N`.
-3. **Round-robin Rotation**:
+   - **Cell Deps**: Must contain all other `N - 1` cells in the group; read their timestamps as the set `deps_timestamps`.
+2. **Round-robin Rotation**:
    - **Oldest Verification**: `old_timestamp` must be less than or equal to every value in `deps_timestamps`.
    - **Newest Verification**: `new_timestamp` must be strictly greater than `old_timestamp` AND strictly greater than every value in `deps_timestamps`.
-4. **Consensus Proof**: `new_timestamp` must be exactly equal to the timestamp of one of the block headers in the transaction's `header_deps`.
+3. **Header timestamp Proof**: `new_timestamp` must be exactly equal to the timestamp of one of the block headers in the transaction's `header_deps`.
 
 ## 4. Design Features
 

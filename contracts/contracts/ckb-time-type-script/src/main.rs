@@ -5,7 +5,7 @@
 extern crate alloc;
 
 #[cfg(not(any(feature = "library", test)))]
-ckb_std::entry!(program_entry);
+ckb_std::entry!(main);
 #[cfg(not(any(feature = "library", test)))]
 // By default, the following heap configuration is used:
 // * 16KB fixed heap
@@ -15,8 +15,11 @@ ckb_std::entry!(program_entry);
 // and the buddy-alloc alloc implementation.
 ckb_std::default_alloc!(16384, 1258306, 64);
 
-pub fn program_entry() -> i8 {
-    ckb_std::debug!("This is a sample contract!");
+use ckb_time_type_script::entry;
 
-    0
+pub fn main() -> i8 {
+    match entry() {
+        Ok(_) => 0,
+        Err(err) => err as i8,
+    }
 }

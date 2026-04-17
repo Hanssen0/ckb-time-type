@@ -1,9 +1,12 @@
-#![cfg_attr(not(feature = "library"), no_std)]
-#![allow(special_module_name)]
-#![allow(unused_attributes)]
-#[cfg(feature = "library")]
-mod main;
-#[cfg(feature = "library")]
-pub use main::program_entry;
+#![cfg_attr(not(any(feature = "library", test)), no_std)]
 
+#[cfg(not(any(feature = "library", test)))]
 extern crate alloc;
+
+pub mod error;
+pub mod operations;
+pub mod types;
+pub mod utils;
+
+mod entry;
+pub use entry::entry;

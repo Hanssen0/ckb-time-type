@@ -449,6 +449,7 @@ dependencies = [
  "buddy-alloc",
  "cc",
  "ckb-gen-types",
+ "ckb-hash",
  "ckb-x64-simulator",
  "gcd",
  "int-enum",
@@ -505,6 +506,7 @@ dependencies = [
 name = "ckb-time-type-script"
 version = "0.1.0"
 dependencies = [
+ "ckb-hash",
  "ckb-std",
 ]
 
