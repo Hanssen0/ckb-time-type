@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://ckb-cto.hanssen0.com/">
-    <img alt="Logo" src="https://raw.githubusercontent.com/Hanssen0/ckb-cto/main/docs/logo.svg" style="height: 8rem; max-width: 90%; padding: 0.5rem 0;" />
+    <img alt="Logo" src="https://raw.githubusercontent.com/Hanssen0/ckb-cto/main/docs/logo.svg" style="height: 10rem; max-width: 90%; padding: 0.5rem 0;" />
   </a>
 </p>
 
@@ -8,8 +8,17 @@
   CTO
 </h1>
 
-[![NPM Version](https://img.shields.io/npm/v/@ckb-cto/supplier?label=CLI)](https://www.npmjs.com/package/@ckb-cto/supplier)
-[![NPM Version](https://img.shields.io/npm/v/@ckb-cto/lib?label=SDK)](https://www.npmjs.com/package/@ckb-cto/lib)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@ckb-cto/supplier"><img
+    alt="NPM Version" src="https://img.shields.io/npm/v/@ckb-cto/supplier?label=CLI"
+  /></a>
+  <a href="https://www.npmjs.com/package/@ckb-cto/lib"><img
+    alt="NPM Version" src="https://img.shields.io/npm/v/@ckb-cto/lib?label=SDK"
+  /></a>
+  <a href="https://ckb-cto.hanssen0.com/"><img
+    alt="Dashboard" src="https://img.shields.io/website?url=https%3A%2F%2Fckb-cto.hanssen0.com%2F&label=Dashboard"
+  /></a>
+</p>
 
 CTO is CKB Time Oracle. A decentralized, high-concurrency time oracle for CKB. It provides a verifiable, monotonic-increasing time source on-chain by maintaining a rotating group of cells.
 
