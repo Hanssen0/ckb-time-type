@@ -23,7 +23,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-3">
             <a
-              href="https://github.com/Hanssen0/ckb-time-type"
+              href="https://github.com/Hanssen0/ckb-cto"
               target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-50"
@@ -33,10 +33,10 @@ export default function Home() {
             </a>
             <div className="flex flex-col text-left">
               <h1 className="text-lg leading-none font-bold tracking-tight sm:text-2xl">
-                CKB Time Oracle
+                CTO
               </h1>
               <p className="mt-1 text-[10px] text-zinc-500 sm:text-sm">
-                Decentralized, verifiable time source
+                CKB Time Oracle
               </p>
             </div>
           </div>

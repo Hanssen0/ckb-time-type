@@ -1,6 +1,6 @@
-# CKB Time Oracle Supplier Design
+# CTO (CKB Time Oracle) Supplier Design
 
-The Supplier is an off-chain service responsible for maintaining the freshness of the CKB Time Oracle by periodically updating the oracle cells.
+The Supplier is an off-chain service responsible for maintaining the freshness of the CTO by periodically updating the oracle cells.
 
 ## 1. Core Workflow
 

@@ -212,6 +212,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ckb-cto-script"
+version = "0.1.0"
+dependencies = [
+ "ckb-hash",
+ "ckb-std",
+]
+
+[[package]]
 name = "ckb-dao"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -500,14 +508,6 @@ dependencies = [
  "libloading",
  "rand 0.8.6",
  "serde_json",
-]
-
-[[package]]
-name = "ckb-time-type-script"
-version = "0.1.0"
-dependencies = [
- "ckb-hash",
- "ckb-std",
 ]
 
 [[package]]

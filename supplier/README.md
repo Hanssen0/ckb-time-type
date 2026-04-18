@@ -1,6 +1,6 @@
-# CKB Time Oracle Supplier
+# CTO (CKB Time Oracle) Supplier
 
-The Supplier is a command-line tool and service used to interact with and maintain CKB Time Oracle cell groups.
+The Supplier is a command-line tool and service used to interact with and maintain CTO cell groups.
 
 ## Design
 

@@ -1,6 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { ccc } from "@ckb-ccc/shell";
-import { createGroup } from "@ckb-time-type/lib";
+import { createGroup } from "@ckb-cto/lib";
 
 const HEX_PARSER = async (raw: string) => ccc.hexFrom(raw);
 

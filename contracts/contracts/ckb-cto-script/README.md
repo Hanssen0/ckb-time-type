@@ -1,4 +1,4 @@
-# ckb-time-type-script
+# ckb-cto-script
 
 *This contract was bootstrapped with [ckb-script-templates].*
 

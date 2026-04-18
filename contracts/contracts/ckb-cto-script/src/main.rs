@@ -15,7 +15,7 @@ ckb_std::entry!(main);
 // and the buddy-alloc alloc implementation.
 ckb_std::default_alloc!(16384, 1258306, 64);
 
-use ckb_time_type_script::entry;
+use ckb_cto_script::entry;
 
 pub fn main() -> i8 {
     match entry() {

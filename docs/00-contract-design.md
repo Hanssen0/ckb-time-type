@@ -1,4 +1,4 @@
-# CKB Time Oracle Technical Proposal
+# CTO (CKB Time Oracle) Technical Proposal
 
 ## 1. Design Background and Goals
 

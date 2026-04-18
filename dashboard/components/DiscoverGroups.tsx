@@ -3,7 +3,7 @@
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { getInactivityTime, truncateHex } from "@/lib/utils";
 import { useCcc } from "@ckb-ccc/connector-react";
-import { discoverTimeCellGroups, TimeCellGroupInfo } from "@ckb-time-type/lib";
+import { discoverTimeCellGroups, TimeCellGroupInfo } from "@ckb-cto/lib";
 import React, { useCallback, useEffect, useState } from "react";
 import { ChevronRightIcon, RefreshIcon } from "./Icons";
 import { SectionHeader } from "./SectionHeader";

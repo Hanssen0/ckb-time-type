@@ -3,7 +3,7 @@
 import { useGroupSigner } from "@/hooks/useGroupSigner";
 import { OperationLog, getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
-import { supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
+import { supplyTime as sdkSupplyTime } from "@ckb-cto/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";

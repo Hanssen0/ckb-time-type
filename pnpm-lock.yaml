@@ -16,7 +16,7 @@ importers:
       '@ckb-ccc/connector-react':
         specifier: ^1.0.34
         version: 1.0.34(@types/react@19.2.14)(react@19.2.4)(typescript@5.9.3)(zod@4.3.6)
-      '@ckb-time-type/lib':
+      '@ckb-cto/lib':
         specifier: workspace:*
         version: link:../lib
       next:
@@ -81,7 +81,7 @@ importers:
       '@ckb-ccc/shell':
         specifier: ^1.1.25
         version: 1.1.25(typescript@6.0.3)
-      '@ckb-time-type/lib':
+      '@ckb-cto/lib':
         specifier: workspace:*
         version: link:../lib
       '@oclif/core':

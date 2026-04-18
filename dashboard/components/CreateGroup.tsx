@@ -3,7 +3,7 @@
 import { useAddress } from "@/hooks/useAddress";
 import { getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
-import { createGroup as sdkCreateGroup } from "@ckb-time-type/lib";
+import { createGroup as sdkCreateGroup } from "@ckb-cto/lib";
 import { useState } from "react";
 import { CheckCircleIcon, ExternalLinkIcon, RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";

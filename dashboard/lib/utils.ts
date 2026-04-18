@@ -1,5 +1,5 @@
 import { ccc } from "@ckb-ccc/ccc";
-import { getNetworkConfig } from "@ckb-time-type/lib";
+import { getNetworkConfig } from "@ckb-cto/lib";
 
 export interface OperationLog {
   time: string;

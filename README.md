@@ -1,4 +1,4 @@
-# CKB Time Oracle
+# CTO (CKB Time Oracle)
 
 A decentralized, high-concurrency time oracle for CKB.
 

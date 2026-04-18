@@ -25,7 +25,7 @@ fn bytes_from_u64(num: u64) -> Bytes {
 
 fn prepare_context() -> (Context, Script, Script) {
     let mut context = Context::default();
-    let ckb_time_bin = context.deploy_cell_by_name("ckb-time-type-script");
+    let ckb_time_bin = context.deploy_cell_by_name("ckb-cto-script");
     let always_success_bin = context.deploy_cell(ALWAYS_SUCCESS.clone());
 
     let always_success = context

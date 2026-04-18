@@ -9,7 +9,7 @@ import {
 } from "@/lib/utils";
 import { ccc } from "@ckb-ccc/ccc";
 import { useCcc } from "@ckb-ccc/connector-react";
-import { findTimeCells, TimeCellGroup } from "@ckb-time-type/lib";
+import { findTimeCells, TimeCellGroup } from "@ckb-cto/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLinkIcon, RefreshIcon, SearchIcon } from "./Icons";
 import { SectionHeader } from "./SectionHeader";

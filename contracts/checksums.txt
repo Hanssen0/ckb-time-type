@@ -1,2 +1,2 @@
-c6590cad3f2dbcb3d83ba2d331c004ed532b95b6ff09a593d609d86f0c1ee5cd  build/release/ckb-time-type-script
-cc59e5a2b54bf6e62046db425693b1e533010fdb90eb843e659a6c845a192b73  build/release/ckb-time-type-script.debug
+91e38f5c7e9977f139f72ad26851db9cba729fb9c234d5fcdb5bb908b7933964  build/release/ckb-cto-script
+ef90d7c711238a9262fc91b636d23e77d0dc39b9974f09c02119cbb934545cbe  build/release/ckb-cto-script.debug
