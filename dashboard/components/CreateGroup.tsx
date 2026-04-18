@@ -7,6 +7,7 @@ import { createGroup as sdkCreateGroup } from "@ckb-time-type/lib";
 import { useState } from "react";
 import { CheckCircleIcon, ExternalLinkIcon, RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
+import { SectionHeader } from "./SectionHeader";
 
 export function CreateGroup({
   onCreated,
@@ -42,20 +43,20 @@ export function CreateGroup({
       setTxHash(hash);
       setCreatedArgs(args);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to create group");
+      setError(err instanceof Error ? err.message : "Failed to deploy oracle");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative flex flex-col gap-6 overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
-      <h2 className="text-lg font-bold sm:text-xl">Create New Cell Group</h2>
+    <div className="relative flex flex-col gap-4 overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
+      <SectionHeader title="Create New Oracle" />
 
       {!address ? (
         <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-zinc-200 py-8 dark:border-zinc-800">
           <p className="text-sm text-zinc-500">
-            Connect your wallet to create a new group
+            Connect your wallet to create a new oracle
           </p>
           <button
             onClick={open}
@@ -117,7 +118,7 @@ export function CreateGroup({
               {createdArgs && (
                 <div className="flex flex-col gap-1 text-zinc-900 dark:text-zinc-50">
                   <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
-                    Group Args
+                    Oracle Args
                   </span>
                   <span className="font-mono text-xs break-all">
                     {createdArgs}
@@ -140,7 +141,7 @@ export function CreateGroup({
                 onClick={() => onCreated(createdArgs)}
                 className="cursor-pointer rounded-md bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
               >
-                Query this group →
+                Query this oracle →
               </button>
             )}
           </div>

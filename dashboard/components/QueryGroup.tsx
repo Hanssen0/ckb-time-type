@@ -12,6 +12,7 @@ import { useCcc } from "@ckb-ccc/connector-react";
 import { findTimeCells, TimeCellGroup } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLinkIcon, RefreshIcon, SearchIcon } from "./Icons";
+import { SectionHeader } from "./SectionHeader";
 import { TextInput } from "./TextInput";
 
 import { AUTO_REFRESH_INTERVAL, INACTIVITY_THRESHOLD } from "@/lib/constants";
@@ -76,8 +77,7 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold sm:text-xl">Query Cell Group</h2>
+      <SectionHeader title="Query Oracle">
         {result && (
           <button
             onClick={refresh}
@@ -97,11 +97,11 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
             </span>
           </button>
         )}
-      </div>
+      </SectionHeader>
 
       <form action={handleSearch} className="flex flex-col gap-4">
         <TextInput
-          label="Group Args"
+          label="Oracle Args"
           type="text"
           value={args}
           onChange={(e) => setArgs(e.target.value)}
@@ -127,7 +127,7 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
       {loading && !result && (
         <div className="flex flex-col items-center justify-center py-12 text-zinc-400">
           <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-400" />
-          <p className="text-xs font-medium sm:text-sm">Querying Group...</p>
+          <p className="text-xs font-medium sm:text-sm">Querying Oracle...</p>
         </div>
       )}
 
@@ -135,7 +135,7 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
         <div className="animate-in fade-in slide-in-from-bottom-2 flex flex-col gap-6 duration-300">
           <div className="flex flex-col gap-3">
             <h3 className="text-xs font-bold tracking-wider text-zinc-400 uppercase">
-              Cell List
+              Oracle Cell List
             </h3>
             <div className="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
               <div className="overflow-x-auto">
@@ -143,7 +143,9 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
                   <thead className="bg-zinc-50 text-[10px] font-bold tracking-wider text-zinc-400 uppercase dark:bg-zinc-800/50">
                     <tr>
                       <th className="px-4 py-3">#</th>
-                      <th className="px-4 py-3 whitespace-nowrap">Last Active</th>
+                      <th className="px-4 py-3 whitespace-nowrap">
+                        Last Active
+                      </th>
                       <th className="px-4 py-3 whitespace-nowrap">Timestamp</th>
                       <th className="px-4 py-3">OutPoint</th>
                     </tr>
@@ -167,7 +169,7 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
                           >
                             {getInactivityTime(timestamp, now)} ago
                           </td>
-                          <td className="px-4 py-3 font-medium text-zinc-600 whitespace-nowrap dark:text-zinc-300">
+                          <td className="px-4 py-3 font-medium whitespace-nowrap text-zinc-600 dark:text-zinc-300">
                             {formatTimestamp(timestamp)}
                           </td>
                           <td className="px-4 py-3">

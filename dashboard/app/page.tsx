@@ -1,6 +1,7 @@
 "use client";
 import { CreateGroup } from "@/components/CreateGroup";
 import { DiscoverGroups } from "@/components/DiscoverGroups";
+import { GitHubIcon } from "@/components/Icons";
 import { QueryGroup } from "@/components/QueryGroup";
 import { SupplyGroup } from "@/components/SupplyGroup";
 import { useAddress } from "@/hooks/useAddress";
@@ -22,10 +23,10 @@ export default function Home() {
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex flex-col text-center sm:text-left">
             <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
-              CKB Time Type Dashboard
+              CKB Time Oracle
             </h1>
             <p className="text-[10px] text-zinc-500 sm:text-sm">
-              Monitor and discover cell groups with ease
+              Decentralized, verifiable time source for CKB smart contracts
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -104,8 +105,28 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-zinc-200 p-8 text-center text-sm text-zinc-500 dark:border-zinc-800">
-        Built with CKB CCC & Next.js
+      <footer className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-zinc-200 p-8 text-center text-sm text-zinc-500 dark:border-zinc-800">
+        <a
+          href="https://github.com/Hanssen0/ckb-time-type"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors hover:text-zinc-900 dark:hover:text-zinc-50"
+          title="Project Repository"
+        >
+          <GitHubIcon />
+        </a>
+        <p>
+          Built with{" "}
+          <a
+            href="https://github.com/ckb-devrel/ccc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-4 transition-colors hover:text-zinc-900 dark:hover:text-zinc-50"
+          >
+            CKB CCC
+          </a>{" "}
+          & Next.js
+        </p>
       </footer>
     </div>
   );

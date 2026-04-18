@@ -6,6 +6,7 @@ import { useCcc } from "@ckb-ccc/connector-react";
 import { discoverTimeCellGroups, TimeCellGroupInfo } from "@ckb-time-type/lib";
 import React, { useCallback, useEffect, useState } from "react";
 import { ChevronRightIcon, RefreshIcon } from "./Icons";
+import { SectionHeader } from "./SectionHeader";
 
 import { AUTO_REFRESH_INTERVAL, MAX_DISCOVER_GROUPS } from "@/lib/constants";
 
@@ -80,8 +81,7 @@ export function DiscoverGroups({
 
   return (
     <div className="relative flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
-        <h2 className="text-lg font-bold sm:text-xl">Discover Groups</h2>
+      <SectionHeader title="Discover Oracles">
         <button
           onClick={refresh}
           disabled={loading}
@@ -99,7 +99,7 @@ export function DiscoverGroups({
             {loading ? "Discovering..." : `Refreshing in ${countdown}s`}
           </span>
         </button>
-      </div>
+      </SectionHeader>
 
       {error && (
         <div className="rounded-lg bg-red-50 p-3 text-xs text-red-600 sm:p-4 sm:text-sm dark:bg-red-900/20 dark:text-red-400">
@@ -120,7 +120,7 @@ export function DiscoverGroups({
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1 overflow-hidden">
                       <span className="text-[10px] font-bold tracking-wider text-zinc-400 uppercase">
-                        Group Args
+                        Oracle Args
                       </span>
                       <span className="font-mono text-[10px] break-all text-zinc-600 sm:text-xs dark:text-zinc-400">
                         {truncateHex(group.args, 10, 8)}
@@ -165,7 +165,7 @@ export function DiscoverGroups({
       ) : (
         !loading && (
           <div className="rounded-lg border border-dashed border-zinc-200 px-4 py-8 text-center text-xs text-zinc-500 sm:py-12 sm:text-sm dark:border-zinc-800">
-            No groups discovered yet. Automatic discovery is in progress...
+            No oracles discovered yet. Automatic discovery is in progress...
           </div>
         )
       )}

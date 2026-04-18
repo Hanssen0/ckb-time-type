@@ -1,12 +1,13 @@
 "use client";
 
 import { useGroupSigner } from "@/hooks/useGroupSigner";
-import { OperationLog, getExplorerTxUrl } from "@/lib/utils";
+import { OperationLog, getExplorerTxUrl, truncateHex } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
 import { supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
+import { SectionHeader } from "./SectionHeader";
 import { TextInput } from "./TextInput";
 
 export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
@@ -90,14 +91,14 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
         await tx.completeFeeBy(signer);
         const txHash = await signer.sendTransaction(tx);
 
-        const logPrefix = `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Timestamp Updated to ${nowTimestamp}. Transaction Hash: `;
+        const logPrefix = `[Update] Oracle ID: ${truncateHex(args)} (Updated to ${nowTimestamp}). Transaction Hash: `;
 
         addLog("", "success", txHash, logPrefix, ".");
         await client.cache.clear();
       } catch (err: unknown) {
         if (err instanceof ccc.ErrorClientRBFRejected) {
           addLog(
-            `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Updating by another supplier.`,
+            `[Update] Oracle ID: ${truncateHex(args)}. Updating by another supplier.`,
             "info",
           );
           return;
@@ -131,10 +132,7 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-orange-600 sm:text-xl dark:text-orange-400">
-          Supply Timestamps
-        </h2>
+      <SectionHeader title="Supply Oracle">
         <label className="flex cursor-pointer items-center gap-1 text-xs font-medium text-zinc-500">
           <input
             type="checkbox"
@@ -144,11 +142,11 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
           />
           Private Key Mode
         </label>
-      </div>
+      </SectionHeader>
 
       <div className="grid grid-cols-1 gap-4">
         <TextInput
-          label="Target Group Args"
+          label="Target Oracle Args"
           type="text"
           value={args}
           onChange={(e) => setArgs(e.target.value)}
