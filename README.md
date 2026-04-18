@@ -1,74 +1,48 @@
 # CTO (CKB Time Oracle)
 
-A decentralized, high-concurrency time oracle for CKB.
+[![NPM Version](https://img.shields.io/npm/v/@ckb-cto/supplier?label=CLI)](https://www.npmjs.com/package/@ckb-cto/supplier)
+[![NPM Version](https://img.shields.io/npm/v/@ckb-cto/lib?label=SDK)](https://www.npmjs.com/package/@ckb-cto/lib)
 
-## Background
+A decentralized, high-concurrency time oracle for CKB. It provides a verifiable, monotonic-increasing time source on-chain by maintaining a rotating group of cells.
 
-On CKB, smart contracts can verify block timestamps using `header_deps`. However, they cannot natively determine if a provided header is "fresh" or years old.
+## Live Dashboard
+The live dashboard is available at [ckb-cto.hanssen0.com](https://ckb-cto.hanssen0.com).
 
-This project solves this by maintaining a rotating group of on-chain cells updated with the latest block timestamps. By referencing these cells, other contracts can ensure they are using reliable, near-real-time data without needing complex header parsing or trusting a single centralized provider.
+[![Dashboard](https://raw.githubusercontent.com/Hanssen0/ckb-cto/refs/heads/main/docs/dashboard.png)](https://ckb-cto.hanssen0.com)
 
-## Quick Start
+## Packages
 
-### 1. Query Oracle State
+### CLI (@ckb-cto/supplier)
+Command-line tool to initialize, maintain, and query oracle groups.
+- **create**: Initialize a new group of oracle cells.
+- **supply**: Automatically update oracle timestamps at regular intervals.
+- **query**: Inspect the status and history of oracle groups.
 
-Check the current timestamps and rotation status of an oracle group.
-
-```bash
-cd supplier
-pnpm run start query -a <ARGS>
-```
-
-**Expected Output:**
-
-```text
-Args: 0x...80. Group Size: 3.
-
-- #0 1776461097099 in 0x...5b#0
-- #1 1776461142156 in 0x...80#0
-- #2 1776461176556 in 0x...15#0
-```
-
-### 2. Supply Timestamps
-
-Start a service to periodically update the oldest cell in the group with the latest block time.
+For detailed command usage, see the [CLI README](./supplier/README.md).
 
 ```bash
-pnpm run start supply -a <ARGS> --pk <PRIVATE_KEY>
+# Maintain an oracle group by automatically updating its timestamp
+npx @ckb-cto/supplier supply --args <ORACLE_ARGS> --pk <PRIVATE_KEY>
 ```
 
-**Expected Output:**
-
-```text
-2024-04-18T10:00:00.000Z | [Update] Group Size: 3 (1713421200000 - 1713421320000), Args: 0x... Updated to 1713421380000. Transaction Hash: 0x...
-```
-
-### 3. Create New Oracle
-
-Initialize a new oracle group with a specific size.
-
+### SDK (@ckb-cto/lib)
+TypeScript library to interact with CTO cells in your applications.
 ```bash
-pnpm run start create -s 3 --pk <PRIVATE_KEY>
+npm install @ckb-cto/lib
 ```
 
----
+For detailed command usage, see the [SDK README](./lib/README.md).
 
-## Architecture in Brief
+## Project Structure
+- `contracts/`: Core Rust scripts for the time oracle logic.
+- `supplier/`: CLI tool source code.
+- `lib/`: TypeScript SDK source code.
+- `dashboard/`: Web monitoring dashboard source code.
+- `docs/`: Technical specifications and design documents.
 
-- **Multi-Cell Rotation**: Uses multiple cells to distribute read/write pressure and increase concurrency.
-- **Permissionless**: Updates are proven by block headers and can be performed by any participant.
-- **Secure**: The contract enforces lock continuity to prevent hijacking or restricted access.
-
-For detailed logic and specifications, see:
-
-- [Contract Design](docs/00-contract-design.md)
-- [Supplier Design](docs/01-supplier-design.md)
-
-## Development
-
-- **Build Contract**: `cd contracts && make build`
-- **Run Tests**: `cd contracts/tests && cargo test`
+## Documentation
+- [Technical Proposal](./docs/00-contract-design.md)
+- [Supplier Design](./docs/01-supplier-design.md)
 
 ## License
-
 MIT
