@@ -7,6 +7,7 @@ import { supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
+import { TextInput } from "./TextInput";
 
 export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
   const { client, open } = useCcc();
@@ -146,32 +147,22 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex flex-col gap-2">
-          <label className="text-xs font-medium text-zinc-500">
-            Target Group Args
-          </label>
-          <input
-            type="text"
-            value={args}
-            onChange={(e) => setArgs(e.target.value)}
-            placeholder="0x..."
-            className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-orange-500 sm:text-sm dark:border-zinc-700 dark:bg-zinc-800"
-          />
-        </div>
+        <TextInput
+          label="Target Group Args"
+          type="text"
+          value={args}
+          onChange={(e) => setArgs(e.target.value)}
+          placeholder="0x..."
+        />
 
         {usePrivateKey && (
           <div className="animate-in fade-in flex flex-col gap-2 duration-300">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-medium text-zinc-500">
-                Private Key (Unsafe storage, use with caution)
-              </label>
-            </div>
-            <input
+            <TextInput
+              label="Private Key (Unsafe storage, use with caution)"
               type="password"
               value={privateKey}
               onChange={(e) => setPrivateKey(e.target.value)}
               placeholder="0x..."
-              className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-orange-500 sm:text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
             {pkInfo !== null && (
               <div className="flex items-center justify-between gap-2">

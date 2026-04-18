@@ -49,7 +49,7 @@ export function CreateGroup({
   };
 
   return (
-    <div className="relative flex flex-col gap-6 overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="relative flex flex-col gap-6 overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
       <h2 className="text-lg font-bold sm:text-xl">Create New Cell Group</h2>
 
       {!address ? (

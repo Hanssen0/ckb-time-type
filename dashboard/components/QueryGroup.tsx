@@ -12,6 +12,7 @@ import { useCcc } from "@ckb-ccc/connector-react";
 import { findTimeCells, TimeCellGroup } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLinkIcon, RefreshIcon, SearchIcon } from "./Icons";
+import { TextInput } from "./TextInput";
 
 import { AUTO_REFRESH_INTERVAL, INACTIVITY_THRESHOLD } from "@/lib/constants";
 
@@ -74,7 +75,7 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
   };
 
   return (
-    <div className="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex flex-col gap-6 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-900 shadow-sm sm:p-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold sm:text-xl">Query Cell Group</h2>
         {result && (
@@ -99,27 +100,22 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
       </div>
 
       <form action={handleSearch} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <label className="text-xs font-bold tracking-wider text-zinc-400 uppercase">
-            Group Args
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              value={args}
-              onChange={(e) => setArgs(e.target.value)}
-              placeholder="0x..."
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 pr-10 font-mono text-xs transition-all focus:border-zinc-400 focus:bg-white focus:ring-2 focus:ring-zinc-100 focus:outline-none sm:py-3 sm:text-sm dark:border-zinc-800 dark:bg-zinc-950 dark:focus:border-zinc-600 dark:focus:ring-zinc-800/50"
-            />
+        <TextInput
+          label="Group Args"
+          type="text"
+          value={args}
+          onChange={(e) => setArgs(e.target.value)}
+          placeholder="0x..."
+          suffix={
             <button
               type="submit"
               disabled={loading || args.length < 66}
-              className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer rounded-md p-1.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="cursor-pointer rounded-md p-1.5 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
             >
               <SearchIcon className={loading ? "animate-pulse" : ""} />
             </button>
-          </div>
-        </div>
+          }
+        />
       </form>
 
       {error && (
