@@ -21,13 +21,24 @@ export default function Home() {
     <div className="flex flex-1 flex-col bg-zinc-50 font-sans text-zinc-900 dark:bg-black dark:text-zinc-50">
       <header className="sticky top-0 z-50 border-b border-zinc-200 bg-white px-4 py-4 sm:px-8 sm:py-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="flex flex-col text-center sm:text-left">
-            <h1 className="text-lg font-bold tracking-tight sm:text-2xl">
-              CKB Time Oracle
-            </h1>
-            <p className="text-[10px] text-zinc-500 sm:text-sm">
-              Decentralized, verifiable time source for CKB smart contracts
-            </p>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/Hanssen0/ckb-time-type"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-50"
+              title="Project Repository"
+            >
+              <GitHubIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+            </a>
+            <div className="flex flex-col text-left">
+              <h1 className="text-lg leading-none font-bold tracking-tight sm:text-2xl">
+                CKB Time Oracle
+              </h1>
+              <p className="mt-1 text-[10px] text-zinc-500 sm:text-sm">
+                Decentralized, verifiable time source
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             {address ? (
@@ -105,16 +116,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-zinc-200 p-8 text-center text-sm text-zinc-500 dark:border-zinc-800">
-        <a
-          href="https://github.com/Hanssen0/ckb-time-type"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-colors hover:text-zinc-900 dark:hover:text-zinc-50"
-          title="Project Repository"
-        >
-          <GitHubIcon />
-        </a>
+      <footer className="border-t border-zinc-200 p-8 text-center text-sm text-zinc-500 dark:border-zinc-800">
         <p>
           Built with{" "}
           <a
