@@ -1,0 +1,11 @@
+**/node_modules/
+coverage
+
+dist*
+
+.vscode
+.env*
+
+*.DS_Store
+
+tsconfig.tsbuildinfo

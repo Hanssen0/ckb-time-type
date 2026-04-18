@@ -1,9 +1,10 @@
 "use client";
 
 import { useAddress } from "@/hooks/useAddress";
-import { createGroup, getExplorerTxUrl } from "@/lib/utils";
+import { getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
-import React, { useState } from "react";
+import { createGroup as sdkCreateGroup } from "@ckb-time-type/lib";
+import { useState } from "react";
 import { CheckCircleIcon, ExternalLinkIcon, RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
 
@@ -22,8 +23,7 @@ export function CreateGroup({
   const [txHash, setTxHash] = useState<string | null>(null);
   const [createdArgs, setCreatedArgs] = useState<string | null>(null);
 
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleCreate = async () => {
     if (!signer) {
       open();
       return;
@@ -35,7 +35,10 @@ export function CreateGroup({
     setCreatedArgs(null);
 
     try {
-      const { txHash: hash, args } = await createGroup(signer, size);
+      const { tx, args } = await sdkCreateGroup(signer, size);
+      await tx.completeFeeBy(signer);
+      const hash = await signer.sendTransaction(tx);
+
       setTxHash(hash);
       setCreatedArgs(args);
     } catch (err: unknown) {
@@ -62,7 +65,7 @@ export function CreateGroup({
           </button>
         </div>
       ) : (
-        <form onSubmit={handleCreate} className="flex flex-col gap-4">
+        <form action={handleCreate} className="flex flex-col gap-4">
           <div className="flex flex-wrap items-end justify-center gap-6">
             <NumericStepper
               label="Group Size (N)"

@@ -1,9 +1,9 @@
 "use client";
 
 import { useGroupSigner } from "@/hooks/useGroupSigner";
-import { OperationLog } from "@/lib/types";
-import { findTimeCells, getExplorerTxUrl, supplyTime } from "@/lib/utils";
+import { OperationLog, getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
+import { findTimeCells, supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
@@ -59,7 +59,10 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
       const newestTimestamp = ccc.numFromBytes(cells[0].outputData);
       const nowTimestamp = (await client.getTipHeader()).timestamp;
 
-      const txHash = await supplyTime(signer, args);
+      const { tx } = await sdkSupplyTime(signer, args);
+      await tx.completeFeeBy(signer);
+      const txHash = await signer.sendTransaction(tx);
+
       const logPrefix = `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Timestamp Updated to ${nowTimestamp}. Transaction Hash: `;
 
       addLog("", "success", txHash, logPrefix, ".");

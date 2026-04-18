@@ -1,0 +1,9 @@
+packages:
+  - dashboard
+  - supplier
+  - lib
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - unrs-resolver

@@ -1,10 +1,6 @@
 import { Command, Flags } from "@oclif/core";
 import { ccc } from "@ckb-ccc/shell";
-import {
-  CKB_TIME_TYPE_CELL_DEP_TX_HASH,
-  CKB_TIME_TYPE_CELL_DEP_INDEX,
-} from "../constants.js";
-import { findTimeCells } from "../utils.js";
+import { supplyTime, findTimeCells } from "@ckb-time-type/lib";
 
 const HEX_PARSER = async (raw: string) => ccc.hexFrom(raw);
 
@@ -102,7 +98,7 @@ export default class Supply extends Command {
 async function update(
   logger: Command,
   signer: ccc.Signer,
-  args: ccc.BytesLike,
+  args: ccc.HexLike,
   flags: {
     txHash?: ccc.HexLike;
     index?: ccc.NumLike;
@@ -110,54 +106,44 @@ async function update(
     hashType?: ccc.HashTypeLike;
   },
 ) {
-  const { cells, n } = await findTimeCells(signer.client, args, flags);
-  const old_timestamp = ccc.numFromBytes(cells[0].outputData);
-  const previous_timestamp = ccc.numFromBytes(
-    cells[cells.length - 1].outputData,
-  );
-
-  const header = await signer.client.getTipHeader();
-  const { timestamp } = header;
-
-  const tx = ccc.Transaction.from({
-    cellDeps: [
-      ...cells.slice(1).map((cell) => ({
-        outPoint: cell.outPoint,
-        depType: "code",
-      })),
-      {
-        outPoint: {
-          txHash: flags.txHash ?? CKB_TIME_TYPE_CELL_DEP_TX_HASH,
-          index: flags.index ?? CKB_TIME_TYPE_CELL_DEP_INDEX,
-        },
-        depType: "code",
-      },
-    ],
-    headerDeps: [header.hash],
-    inputs: [cells[0]],
-    outputs: [cells[0].cellOutput],
-    outputsData: [ccc.numToBytes(timestamp, 8)],
+  // We call findTimeCells only for logging purposes here,
+  // supplyTime will call it again internally.
+  const { cells, n } = await findTimeCells(signer.client, args, {
+    codeHash: flags.codeHash,
+    hashType: flags.hashType,
   });
-  await tx.addCellDepsOfKnownScripts(
-    signer.client,
-    ccc.KnownScript.AlwaysSuccess,
-  );
+  if (cells.length === 0) {
+    logger.log(`No cells found for args: ${ccc.hexFrom(args)}`);
+    return;
+  }
 
-  await tx.completeFeeBy(signer);
+  // SDK sorts descending (newest first)
+  const newestTimestamp = ccc.numFromBytes(cells[0].outputData);
+  const oldestTimestamp = ccc.numFromBytes(cells[cells.length - 1].outputData);
+
   try {
+    const { tx, header } = await supplyTime(signer, args, undefined, {
+      codeHash: flags.codeHash,
+      hashType: flags.hashType,
+      txHash: flags.txHash,
+      index: flags.index,
+    });
+    await tx.completeFeeBy(signer);
     const txHash = await signer.sendTransaction(tx);
     logger.log(
-      `${new Date().toISOString()} | [Update] Group Size: ${n} (${old_timestamp} - ${previous_timestamp}), Args: ${ccc.hexFrom(
+      `${new Date().toISOString()} | [Update] Group Size: ${n} (${newestTimestamp} - ${oldestTimestamp}), Args: ${ccc.hexFrom(
         args,
-      )}. Timestamp Updated to ${timestamp}. Transaction Hash: ${txHash}.`,
+      )}. Timestamp Updated to ${header.timestamp}. Transaction Hash: ${txHash}.`,
     );
   } catch (err) {
     if (err instanceof ccc.ErrorClientRBFRejected) {
       logger.log(
-        `${new Date().toISOString()} | [Update] Group Size: ${n} (${old_timestamp} - ${previous_timestamp}), Args: ${ccc.hexFrom(
+        `${new Date().toISOString()} | [Update] Group Size: ${n} (${newestTimestamp} - ${oldestTimestamp}), Args: ${ccc.hexFrom(
           args,
         )}. Updating by another supplier.`,
       );
+    } else {
+      throw err;
     }
   }
 }
