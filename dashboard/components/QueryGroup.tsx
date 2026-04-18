@@ -143,8 +143,8 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
                   <thead className="bg-zinc-50 text-[10px] font-bold tracking-wider text-zinc-400 uppercase dark:bg-zinc-800/50">
                     <tr>
                       <th className="px-4 py-3">#</th>
-                      <th className="px-4 py-3">Last Active</th>
-                      <th className="px-4 py-3">Timestamp</th>
+                      <th className="px-4 py-3 whitespace-nowrap">Last Active</th>
+                      <th className="px-4 py-3 whitespace-nowrap">Timestamp</th>
                       <th className="px-4 py-3">OutPoint</th>
                     </tr>
                   </thead>
@@ -163,11 +163,11 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
                             {index + 1}
                           </td>
                           <td
-                            className={`px-4 py-3 font-semibold ${isInactive ? "text-orange-500 dark:text-orange-400" : "text-zinc-500 dark:text-zinc-400"}`}
+                            className={`px-4 py-3 font-semibold whitespace-nowrap ${isInactive ? "text-orange-500 dark:text-orange-400" : "text-zinc-500 dark:text-zinc-400"}`}
                           >
                             {getInactivityTime(timestamp, now)} ago
                           </td>
-                          <td className="px-4 py-3 font-medium text-zinc-600 dark:text-zinc-300">
+                          <td className="px-4 py-3 font-medium text-zinc-600 whitespace-nowrap dark:text-zinc-300">
                             {formatTimestamp(timestamp)}
                           </td>
                           <td className="px-4 py-3">
