@@ -1,0 +1,13 @@
+# Source code
+src/
+tsconfig.json
+typedoc.json
+
+# Development tools
+.prettier*
+prettier.config.cjs
+
+# Logs and temp files
+*.log
+.DS_Store
+node_modules/

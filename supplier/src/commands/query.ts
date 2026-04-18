@@ -1,6 +1,6 @@
-import { Command, Flags } from "@oclif/core";
 import { ccc } from "@ckb-ccc/shell";
 import { findTimeCells } from "@ckb-cto/lib";
+import { Command, Flags } from "@oclif/core";
 
 const HEX_PARSER = async (raw: string) => ccc.hexFrom(raw);
 

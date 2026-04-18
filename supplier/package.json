@@ -1,35 +1,47 @@
 {
-  "name": "ckb-time-supplier",
-  "version": "0.0.1",
-  "description": "",
-  "main": "bin/run.js",
+  "name": "@ckb-cto/supplier",
+  "version": "0.1.1",
+  "description": "CLI tool for maintaining CKB Time Oracle (CTO) cell groups.",
   "type": "module",
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepack": "pnpm build",
+    "format": "prettier --write .",
     "start": "node bin/run.js",
-    "dev": "node bin/dev.js"
+    "dev": "tsx bin/dev.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.23.0",
-  "devDependencies": {
-    "@types/node": "^25.6.0",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
-  },
+  "keywords": [
+    "ckb",
+    "nervos",
+    "oracle",
+    "time",
+    "cli"
+  ],
+  "author": "Hanssen",
+  "license": "MIT",
   "dependencies": {
     "@ckb-ccc/shell": "^1.1.25",
     "@ckb-cto/lib": "workspace:*",
     "@oclif/core": "^4.10.5"
   },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0"
+  },
   "bin": {
-    "ckb-time-supplier": "./bin/run.js"
+    "ckb-cto": "./bin/run.js"
   },
   "oclif": {
-    "bin": "ckb-time-supplier",
+    "bin": "ckb-cto",
     "commands": "./dist/commands",
-    "dirname": "ckb-time-supplier",
+    "dirname": "ckb-cto",
     "topicSeparator": " ",
     "additionalHelpFlags": [
       "-h",

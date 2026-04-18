@@ -6,6 +6,15 @@ import {
   TimeCellGroupInfo,
 } from "./types.js";
 
+/**
+ * Finds all time oracle cells belonging to a specific group defined by its type script args.
+ *
+ * @param client - The CKB client (e.g., ccc.ClientPublicTestnet).
+ * @param argsLike - The hexadecimal string representing the type script args of the oracle group.
+ * @param options - Optional script configuration (e.g., custom code hash or hash type).
+ * @returns A promise that resolves to a {@link TimeCellGroup} containing the cells and group size.
+ * @throws Error if the provided args are shorter than 33 bytes.
+ */
 export async function findTimeCells(
   client: ccc.Client,
   argsLike: ccc.HexLike,
@@ -40,6 +49,14 @@ export async function findTimeCells(
   };
 }
 
+/**
+ * Discovers all active time oracle groups on the CKB network by scanning for cells
+ * with the oracle type script.
+ *
+ * @param client - The CKB client to use for discovery.
+ * @param options - Optional script configuration.
+ * @yields An {@link TimeCellGroupInfo} for each complete group found.
+ */
 export async function* discoverTimeCellGroups(
   client: ccc.Client,
   options: ScriptOptionsLike = {},

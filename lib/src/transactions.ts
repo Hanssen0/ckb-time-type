@@ -3,6 +3,17 @@ import { findTimeCells } from "./cells.js";
 import { resolveCellDep, resolveScript } from "./constants.js";
 import { OptionsLike, TimeCellGroup } from "./types.js";
 
+/**
+ * Creates a transaction to update (supply) the oldest cell in a time oracle group
+ * with the current block timestamp.
+ *
+ * @param signer - The signer used to build and sign the transaction.
+ * @param args - The hexadecimal type script args identifying the oracle group.
+ * @param txLike - An optional existing transaction to build upon.
+ * @param options - Optional configuration for script dependencies.
+ * @returns A promise resolving to the built transaction, tip header used, and group info.
+ * @throws Error if the group's cell count does not match its expected size `N`.
+ */
 export async function supplyTime(
   signer: ccc.Signer,
   args: ccc.HexLike,
@@ -53,6 +64,15 @@ export async function supplyTime(
   return { tx, header, ...timeCellGroup };
 }
 
+/**
+ * Creates a transaction to initialize a new time oracle group.
+ *
+ * @param signer - The signer initiating the creation.
+ * @param size - The number of cells (N) to include in the group.
+ * @param txLike - An optional existing transaction to build upon.
+ * @param options - Optional configuration for script dependencies.
+ * @returns A promise resolving to the built transaction, generated group args, and tip header.
+ */
 export async function createGroup(
   signer: ccc.Signer,
   size: number,

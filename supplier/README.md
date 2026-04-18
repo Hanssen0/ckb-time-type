@@ -1,56 +1,57 @@
-# CTO (CKB Time Oracle) Supplier
+# ckb-cto (CTO Supplier CLI)
 
-The Supplier is a command-line tool and service used to interact with and maintain CTO cell groups.
+**ckb-cto** is the command-line tool for maintaining **CTO (CKB Time Oracle)** cell groups. It provides commands to initialize oracle groups, supply them with current timestamps, and query their status.
 
-## Design
+For technical details and architecture design, please refer to the [main documentation](https://github.com/Hanssen0/ckb-cto).
 
-For a detailed explanation of the supplier's behavior and conflict resolution strategy, please refer to:
-
-- **[Supplier Design Specification](../docs/01-supplier-design.md)**
-
-## Usage
-
-### Installation
+## Installation
 
 ```bash
-pnpm install
+# Install globally
+npm install -g @ckb-cto/supplier
+ckb-cto -h
+
+# Or run directly
+npx @ckb-cto/supplier --help
 ```
 
-### Commands
+## Core Commands
 
-#### Query
-
-Check the current status and timestamps of an oracle group.
+### 1. `create`
+Initialize a new group of $N$ oracle cells.
 
 ```bash
-pnpm run start query -a <ARGS>
+ckb-cto create --size 5 --pk <YOUR_PRIVATE_KEY>
 ```
+- `--size`: Number of cells in the rotation group (default: 5).
+- Returns the `Type ID Args` used to identify your oracle.
 
-#### Supply
-
-Run the supplier service to periodically update the oldest cell in a group.
+### 2. `supply`
+Start the automated maintenance service to update oracle timestamps.
 
 ```bash
-pnpm run start supply -a <ARGS> --pk <PRIVATE_KEY>
+ckb-cto supply --args <ORACLE_ARGS> --pk <YOUR_PRIVATE_KEY> --interval 30
 ```
+- `--args`: The Type ID Args of the oracle group(s).
+- `--interval`: Minimum seconds between updates (default: 30).
+- `--mainnet`: Use CKB Mainnet (default: Testnet).
 
-#### Create
-
-Initialize a new oracle group.
+### 3. `query`
+Inspect the status of existing oracle groups.
 
 ```bash
-pnpm run start create -s <SIZE> --pk <PRIVATE_KEY>
+ckb-cto query --args <ORACLE_ARGS>
 ```
 
-### Network Configuration
+## Options
 
-By default, the tool connects to the CKB Testnet.
+| Flag | Description |
+| --- | --- |
+| `--pk` | Private key for signing transactions. |
+| `--args` | Type script args of the oracle group. |
+| `--rpc-url` | Custom CKB node RPC URL. |
+| `--code-hash` | Custom code hash for the CTO script (Advanced). |
+| `--tx-hash` | Custom transaction hash for the CTO cell dep (Advanced). |
 
-- Use `-m` or `--mainnet` for Mainnet.
-- Use `-r` or `--rpc-url` to specify a custom CKB node RPC URL.
-
-## Development
-
-```bash
-pnpm run build
-```
+## License
+MIT

@@ -1,21 +1,35 @@
 {
   "name": "@ckb-cto/lib",
   "version": "0.1.0",
-  "description": "Common library for CKB Time Type script",
+  "description": "A decentralized, high-concurrency time oracle SDK for CKB.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
+    "docs": "typedoc --out docs src/index.ts",
+    "format": "prettier --write .",
     "prepublishOnly": "pnpm build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ckb",
+    "nervos",
+    "oracle",
+    "time",
+    "sdk"
+  ],
+  "author": "Hanssen",
+  "license": "MIT",
   "dependencies": {
     "@ckb-ccc/ccc": "^1.1.25"
   },
   "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "typedoc": "^0.27.9",
     "typescript": "^5"
   }
 }
