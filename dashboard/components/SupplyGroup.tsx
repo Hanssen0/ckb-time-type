@@ -1,7 +1,7 @@
 "use client";
 
 import { useGroupSigner } from "@/hooks/useGroupSigner";
-import { OperationLog, getExplorerTxUrl, truncateHex } from "@/lib/utils";
+import { OperationLog, getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
 import { supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -91,14 +91,18 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
         await tx.completeFeeBy(signer);
         const txHash = await signer.sendTransaction(tx);
 
-        const logPrefix = `[Update] Oracle ID: ${truncateHex(args)} (Updated to ${nowTimestamp}). Transaction Hash: `;
-
+        const logPrefix = `${new Date().toISOString()} | [Update] Group Size: ${n} (${newestTimestamp} - ${oldestTimestamp}), Args: ${ccc.hexFrom(
+          args,
+        )}. Timestamp Updated to ${nowTimestamp}. Transaction Hash: `;
         addLog("", "success", txHash, logPrefix, ".");
+
         await client.cache.clear();
       } catch (err: unknown) {
         if (err instanceof ccc.ErrorClientRBFRejected) {
           addLog(
-            `[Update] Oracle ID: ${truncateHex(args)}. Updating by another supplier.`,
+            `${new Date().toISOString()} | [Update] Group Size: ${n} (${newestTimestamp} - ${oldestTimestamp}), Args: ${ccc.hexFrom(
+              args,
+            )}. Updating by another supplier.`,
             "info",
           );
           return;
