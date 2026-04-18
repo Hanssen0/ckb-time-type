@@ -3,19 +3,20 @@
 import { useGroupSigner } from "@/hooks/useGroupSigner";
 import { OperationLog, getExplorerTxUrl } from "@/lib/utils";
 import { ccc, useCcc } from "@ckb-ccc/connector-react";
-import { findTimeCells, supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
+import { supplyTime as sdkSupplyTime } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshIcon } from "./Icons";
 import { NumericStepper } from "./NumericStepper";
 
 export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
-  const { client } = useCcc();
+  const { client, open } = useCcc();
   const {
     usePrivateKey,
     setUsePrivateKey,
     privateKey,
     setPrivateKey,
-    getSigner,
+    signer,
+    pkSigner,
   } = useGroupSigner();
 
   const [args, setArgs] = useState(initialArgs);
@@ -23,8 +24,34 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
   const [isAutoSupplying, setIsAutoSupplying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState<OperationLog[]>([]);
+  const [pkInfo, setPkInfo] = useState<[ccc.Num, string] | null>(null);
 
   const autoSupplyTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const refreshInfo = useCallback(async () => {
+    if (!pkSigner) {
+      setPkInfo(null);
+      return;
+    }
+
+    try {
+      const balance = await pkSigner.getBalance();
+      const address = await pkSigner.getRecommendedAddress();
+      setPkInfo([balance, address]);
+    } catch (err) {
+      console.error("Failed to refresh info", err);
+    }
+  }, [pkSigner]);
+
+  useEffect(() => {
+    (async () => {
+      refreshInfo();
+      if (usePrivateKey && pkSigner) {
+        const interval = setInterval(refreshInfo, 30000);
+        return () => clearInterval(interval);
+      }
+    })();
+  }, [usePrivateKey, pkSigner, refreshInfo]);
 
   const addLog = (
     msg: string,
@@ -47,45 +74,40 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
 
     setLoading(true);
     try {
-      const signer = getSigner();
-      if (!signer) return;
+      if (!signer) {
+        return;
+      }
 
-      const { cells, n } = await findTimeCells(client, args);
+      const { tx, cells, n } = await sdkSupplyTime(signer, args);
       if (cells.length === 0) throw new Error("No cells found");
-
       const oldestTimestamp = ccc.numFromBytes(
         cells[cells.length - 1].outputData,
       );
       const newestTimestamp = ccc.numFromBytes(cells[0].outputData);
       const nowTimestamp = (await client.getTipHeader()).timestamp;
+      try {
+        await tx.completeFeeBy(signer);
+        const txHash = await signer.sendTransaction(tx);
 
-      const { tx } = await sdkSupplyTime(signer, args);
-      await tx.completeFeeBy(signer);
-      const txHash = await signer.sendTransaction(tx);
+        const logPrefix = `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Timestamp Updated to ${nowTimestamp}. Transaction Hash: `;
 
-      const logPrefix = `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Timestamp Updated to ${nowTimestamp}. Transaction Hash: `;
-
-      addLog("", "success", txHash, logPrefix, ".");
-      await client.cache.clear();
-    } catch (err: unknown) {
-      if (err instanceof ccc.ErrorClientRBFRejected) {
-        const { cells, n } = await findTimeCells(client, args);
-        const oldestTimestamp = ccc.numFromBytes(
-          cells[cells.length - 1].outputData,
-        );
-        const newestTimestamp = ccc.numFromBytes(cells[0].outputData);
-        addLog(
-          `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Updating by another supplier.`,
-          "info",
-        );
-        return;
+        addLog("", "success", txHash, logPrefix, ".");
+        await client.cache.clear();
+      } catch (err: unknown) {
+        if (err instanceof ccc.ErrorClientRBFRejected) {
+          addLog(
+            `[Update] Group Size: ${n} (${oldestTimestamp} - ${newestTimestamp}), Args: ${args}. Updating by another supplier.`,
+            "info",
+          );
+          return;
+        }
+        addLog(err instanceof Error ? err.message : "Supply failed", "error");
+        setIsAutoSupplying(false);
       }
-      addLog(err instanceof Error ? err.message : "Supply failed", "error");
-      if (isAutoSupplying) setIsAutoSupplying(false);
     } finally {
       setLoading(false);
     }
-  }, [args, client, getSigner, isAutoSupplying]);
+  }, [args, client, signer]);
 
   useEffect(() => {
     let initialTimer: NodeJS.Timeout | null = null;
@@ -139,9 +161,11 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
 
         {usePrivateKey && (
           <div className="animate-in fade-in flex flex-col gap-2 duration-300">
-            <label className="text-xs font-medium text-zinc-500">
-              Private Key (Unsafe storage, use with caution)
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-zinc-500">
+                Private Key (Unsafe storage, use with caution)
+              </label>
+            </div>
             <input
               type="password"
               value={privateKey}
@@ -149,6 +173,17 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
               placeholder="0x..."
               className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-xs outline-none focus:ring-2 focus:ring-orange-500 sm:text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
+            {pkInfo !== null && (
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-[10px] text-zinc-400">
+                  Address: {pkInfo ? pkInfo[1] : "-"}
+                </span>
+                <span className="font-mono text-[10px] text-zinc-400">
+                  Balance: {pkInfo ? ccc.fixedPointToString(pkInfo[0]) : "-"}{" "}
+                  CKB
+                </span>
+              </div>
+            )}
           </div>
         )}
 
@@ -163,21 +198,34 @@ export function SupplyGroup({ initialArgs = "" }: { initialArgs?: string }) {
           />
           <div className="flex gap-3">
             <button
-              onClick={() => setIsAutoSupplying(!isAutoSupplying)}
-              className={`flex h-10 cursor-pointer items-center gap-2 rounded-xl px-6 text-sm font-bold shadow-md transition-all active:scale-95 ${isAutoSupplying ? "bg-red-500 text-white hover:bg-red-600" : "bg-orange-500 text-white hover:bg-orange-600"}`}
+              disabled={!signer && usePrivateKey}
+              onClick={() =>
+                signer ? setIsAutoSupplying(!isAutoSupplying) : open()
+              }
+              className={`flex h-10 cursor-pointer items-center gap-2 rounded-xl px-6 text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 ${isAutoSupplying ? "bg-red-500 text-white hover:bg-red-600" : "bg-orange-500 text-white hover:bg-orange-600"}`}
             >
               <RefreshIcon
                 loading={isAutoSupplying}
                 className={isAutoSupplying ? "" : "hidden"}
               />
-              {isAutoSupplying ? "Stop Auto" : "Start Auto"}
+              {!signer && !usePrivateKey
+                ? "Connect"
+                : isAutoSupplying
+                  ? "Stop Auto"
+                  : "Start Auto"}
             </button>
             <button
-              onClick={handleSupply}
-              disabled={loading || isAutoSupplying}
+              onClick={() => (signer ? handleSupply() : open())}
+              disabled={
+                loading || isAutoSupplying || (!signer && usePrivateKey)
+              }
               className="h-10 cursor-pointer rounded-xl bg-zinc-900 px-6 text-sm font-bold whitespace-nowrap text-white shadow-md transition-all hover:bg-zinc-800 active:scale-95 disabled:opacity-50 dark:bg-zinc-50 dark:text-black dark:hover:bg-zinc-200"
             >
-              {loading && !isAutoSupplying ? "Supplying..." : "Supply Once"}
+              {!signer && !usePrivateKey
+                ? "Connect"
+                : loading && !isAutoSupplying
+                  ? "Supplying..."
+                  : "Supply Once"}
             </button>
           </div>
         </div>

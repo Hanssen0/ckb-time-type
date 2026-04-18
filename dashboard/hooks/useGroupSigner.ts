@@ -1,32 +1,39 @@
 "use client";
 
 import { ccc, useCcc, useSigner } from "@ckb-ccc/connector-react";
-import { useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 
 export function useGroupSigner() {
-  const { client, open } = useCcc();
+  const { client } = useCcc();
   const walletSigner = useSigner();
 
   const [usePrivateKey, setUsePrivateKey] = useState(false);
   const [privateKey, setPrivateKey] = useState("");
 
-  const getSigner = useCallback(() => {
-    if (usePrivateKey) {
-      if (!privateKey) throw new Error("Private key is required");
+  const pkSigner = useMemo(() => {
+    if (!usePrivateKey || !privateKey) return null;
+    try {
       return new ccc.SignerCkbPrivateKey(client, privateKey);
-    }
-    if (!walletSigner) {
-      open();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {
       return null;
     }
+  }, [usePrivateKey, privateKey, client]);
+
+  const signer = useMemo(() => {
+    if (usePrivateKey) {
+      return pkSigner;
+    }
     return walletSigner;
-  }, [usePrivateKey, privateKey, client, walletSigner, open]);
+  }, [usePrivateKey, pkSigner, walletSigner]);
 
   return {
     usePrivateKey,
     setUsePrivateKey,
     privateKey,
     setPrivateKey,
-    getSigner,
+    signer,
+    walletSigner,
+    pkSigner,
   };
 }

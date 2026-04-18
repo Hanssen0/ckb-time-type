@@ -1,19 +1,13 @@
 "use client";
 
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
-import { useCcc } from "@ckb-ccc/connector-react";
 import { getInactivityTime, truncateHex } from "@/lib/utils";
-import {
-  discoverTimeCellGroups,
-  TimeCellGroupInfo,
-} from "@ckb-time-type/lib";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCcc } from "@ckb-ccc/connector-react";
+import { discoverTimeCellGroups, TimeCellGroupInfo } from "@ckb-time-type/lib";
+import React, { useCallback, useEffect, useState } from "react";
 import { ChevronRightIcon, RefreshIcon } from "./Icons";
 
-import {
-  AUTO_REFRESH_INTERVAL,
-  MAX_DISCOVER_GROUPS,
-} from "@/lib/constants";
+import { AUTO_REFRESH_INTERVAL, MAX_DISCOVER_GROUPS } from "@/lib/constants";
 
 export function DiscoverGroups({
   onSelectGroup,

@@ -2,8 +2,8 @@
 
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import {
-  getExplorerTxUrl,
   formatTimestamp,
+  getExplorerTxUrl,
   getInactivityTime,
   truncateHex,
 } from "@/lib/utils";
@@ -13,10 +13,7 @@ import { findTimeCells, TimeCellGroup } from "@ckb-time-type/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ExternalLinkIcon, RefreshIcon, SearchIcon } from "./Icons";
 
-import {
-  AUTO_REFRESH_INTERVAL,
-  INACTIVITY_THRESHOLD,
-} from "@/lib/constants";
+import { AUTO_REFRESH_INTERVAL, INACTIVITY_THRESHOLD } from "@/lib/constants";
 
 export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
   const { client } = useCcc();
@@ -158,10 +155,10 @@ export function QueryGroup({ initialArgs }: { initialArgs?: string }) {
                   <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                     {result.cells.map((cell: ccc.Cell, index) => {
                       const timestamp = ccc.numFromBytes(cell.outputData);
-                      const isInactive = now - Number(timestamp) > INACTIVITY_THRESHOLD;
+                      const isInactive =
+                        now - Number(timestamp) > INACTIVITY_THRESHOLD;
 
                       return (
-
                         <tr
                           key={`${cell.outPoint.txHash}-${cell.outPoint.index}`}
                           className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"

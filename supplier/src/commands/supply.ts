@@ -106,28 +106,18 @@ async function update(
     hashType?: ccc.HashTypeLike;
   },
 ) {
-  // We call findTimeCells only for logging purposes here,
-  // supplyTime will call it again internally.
-  const { cells, n } = await findTimeCells(signer.client, args, {
+  const { tx, header, cells, n } = await supplyTime(signer, args, undefined, {
     codeHash: flags.codeHash,
     hashType: flags.hashType,
+    txHash: flags.txHash,
+    index: flags.index,
   });
-  if (cells.length === 0) {
-    logger.log(`No cells found for args: ${ccc.hexFrom(args)}`);
-    return;
-  }
 
   // SDK sorts descending (newest first)
   const newestTimestamp = ccc.numFromBytes(cells[0].outputData);
   const oldestTimestamp = ccc.numFromBytes(cells[cells.length - 1].outputData);
 
   try {
-    const { tx, header } = await supplyTime(signer, args, undefined, {
-      codeHash: flags.codeHash,
-      hashType: flags.hashType,
-      txHash: flags.txHash,
-      index: flags.index,
-    });
     await tx.completeFeeBy(signer);
     const txHash = await signer.sendTransaction(tx);
     logger.log(
