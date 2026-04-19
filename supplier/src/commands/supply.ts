@@ -84,7 +84,7 @@ export default class Supply extends Command {
           // Clear cache to avoid dirty data
           await signer.client.cache.clear();
         } catch (err) {
-          this.error(err as Error);
+          this.warn(err as Error);
         }
       }
 
